@@ -1,9 +1,8 @@
 import  {combineReducers} from 'redux'
 
 import test from './test'
-import  login from './login'
+import homeTab from './homeTab'
 const  RootReducers=combineReducers({
-        test,login
+        test,homeTab
 });
-
 export  default  RootReducers;

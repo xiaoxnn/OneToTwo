@@ -4,45 +4,46 @@ import {
     Text,
     Image,
     StyleSheet,
-    Dimensions,
+    Alert,
     View,
     TouchableOpacity,
     TextInput,
     ImageBackground
 } from 'react-native';
 import {Actions} from 'react-native-router-flux'
-import {deviceInfo} from '../../../utils'
-
+import {deviceInfo,toast} from '../../../utils'
+import  {getFetch} from '../../../utils/network/request/HttpExtension'
 export default class login extends Component<{}> {
 
     constructor(props) {
         super(props)
         this.state = ({
-            loginaccount: '',
-            pwd: ''
+            loginaccount: '18616023570',
+            pwd: '123456'
         })
+        this.data={};
     }
 
     componentDidMount() {
         console.log("test", "componentDidMount")
-
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log("test", "nextProps"+nextProps.userinfo.statusCode)
     }
 
     submitLogin(){
-        this.props.LOGIN({loginaccount:this.state.loginaccount,pwd:this.state.pwd,deviceno:this.state.loginaccount,devicesource:'2'})
+        new Promise.all([this.props.LOGIN({loginaccount:this.state.loginaccount,pwd:this.state.pwd,deviceno:this.state.loginaccount,devicesource:'2'})])
+            .then(res=>{
+                if(res[0].value.statusCode==0){
+                    Actions.drawer()
+                }else{
+                    toast.showLongCenter(res[0].value.msg)
+                }
+                this.data=res;
+            })
     }
-
     render() {
-        let aa=this.props.userinfo
         return (
             <ImageBackground style={styles.contain}
                              source={require('../../../image/login_1080_1920.png')}
             >
-                <Text>aaaaaaaaa{aa.statusCode}</Text>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                     <View style={styles.textContainer}>
                         <TextInput style={{width: deviceInfo.deviceWidth * 0.68, marginLeft: 5, padding: 0}}

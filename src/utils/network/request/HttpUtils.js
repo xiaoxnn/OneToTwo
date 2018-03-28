@@ -69,6 +69,35 @@ const timeoutFetch = (original_fetch, timeout = 30000) => {
 }
 
 export default class HttpUtils extends Component {
+
+
+    /**
+     * 基于fetch 封装的GET 网络请求
+     * @param url 请求URL
+     * @param params 请求参数
+     * @returns {Promise}
+     */
+    static getRequest2 = (url, params = {}) => {
+        //  RootHUD.show()
+       let newUrl= handleUrl(url)(params);
+
+        return new Promise((resolve, reject)=>{
+            fetch(newUrl)
+                .then((response) => response.json())
+                .then((response) => {
+                       // alert(response.msg)
+                    resolve(response);
+                  //   return response
+                })
+                .catch((error) => {
+                    //    RootHUD.hidden()
+                    toast.showShortCenter(error)
+                })
+        })
+
+    }
+
+
   /**
    * 基于fetch 封装的GET 网络请求
    * @param url 请求URL
@@ -77,25 +106,20 @@ export default class HttpUtils extends Component {
    */
   static getRequest = (url, params = {}) => {
   //  RootHUD.show()
+
     return timeoutFetch(fetch(handleUrl(url)(params), {
       method: 'GET',
       headers: header
-    }))
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else {
-            toast.showShortCenter('服务器繁忙，请稍后再试；\r\nCode:' + response.status)
-        }
-      })
+
+    })).then((response) => response.json())
       .then((response) => {
      //   RootHUD.hidden()
         // response.code：是与服务器端约定code：200表示请求成功，非200表示请求失败，message：请求失败内容
         if (response && response.res === responseType.RESPONSE_SUCCESS) {
-          return response
+           return response
         } else {
           // 非 200，错误处理
-          // alert(response.message)
+         //  alert(response.msg)
           return response
         }
       })
@@ -103,7 +127,10 @@ export default class HttpUtils extends Component {
     //    RootHUD.hidden()
           toast.showShortCenter(error)
       })
+
   }
+
+
 
   /**
    * 基于fetch 的 POST 请求

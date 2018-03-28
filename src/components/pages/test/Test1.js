@@ -29,6 +29,10 @@ export default class test1 extends Component<{}> {
                 <TouchableOpacity onPress={()=>Actions.login() }>
                 <Text >跳转到第二个页面</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>Actions.Test3() }>
+                    <Text >跳转动画页面</Text>
+                </TouchableOpacity>
             </View>
         )
     }

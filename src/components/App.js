@@ -7,6 +7,7 @@ import {View, StyleSheet, BackHandler} from "react-native"
 import Action from '../actions'
 import Test1 from './pages/test/Test1'
 import Test2 from './pages/test/Test2'
+import Test3 from './pages/test/Test3'
 import launch from './pages/launch'
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 import loadingScene from './common/loadingScene'
@@ -62,7 +63,8 @@ class App extends Component {
                                     <Scene  key='launch'  component={launch}  />
                                     <Scene key='Test'    component={connect((state) => state.test, Action.dispatch('test'))(Test1)}  />
                                     <Scene key='Test2'   component={connect((state) => state.test, Action.dispatch('test'))(Test2)}  />
-                                    <Scene key='login'   component={connect((state) => state.login, Action.dispatch('login'))(login)}  />
+                                    <Scene key='Test3'   component={Test3}  />
+                                    <Scene key='login'   component={connect((state) => state.homeTab.login, Action.dispatch('login'))(login)}  />
                                 </Stack>
                                 <Scene key="loadingScene" component={loadingScene}/>
 
@@ -84,7 +86,7 @@ class App extends Component {
                                         // activeBackgroundColor="#06c1ae"
                                         // inactiveBackgroundColor="#979797"
                                     >
-                                        <Scene key="tab_1_1" initial={true} component={TabView}   hideNavBar title="首页"   icon={TabIcon}   select={require('../image/tab_1_1.png')}normal={require('../image/tab_1_2.png')} />
+                                        <Scene key="tab_1_1" initial={true}   component={connect((state) => state.homeTab, Action.dispatch('login'))(TabView)}   hideNavBar title="首页"   icon={TabIcon}   select={require('../image/tab_1_1.png')}normal={require('../image/tab_1_2.png')} />
                                         <Scene key="tab_2_1" component={TabView2}  title="新闻"     hideNavBar icon={TabIcon}   select={require('../image/tab_2_1.png')}normal={require('../image/tab_2_2.png')} />
                                         <Scene key="tab_3_1" component={TabView3}  title="视频"     hideNavBar  icon={TabIcon}    select={require('../image/tab_3_1.png')}normal={require('../image/tab_3_2.png')} />
                                         <Scene key="tab_4_1" component={TabView4}  title="我的"     hideNavBar icon={TabIcon}    select={require('../image/tab_4_1.png')}normal={require('../image/tab_4_2.png')} />

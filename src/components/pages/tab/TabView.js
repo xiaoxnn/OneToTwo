@@ -15,16 +15,17 @@ import   {Actions} from 'react-native-router-flux'
 export default class TabView extends Component<{}> {
 
     componentDidMount() {
-
+      let aa=this.props.login.userinfo;
     }
 
     render() {
-        let num=this.props.testSum;
+        let aa=this.props.login.userinfo;
         return (
             <View style={styles.contain}>
                 <TouchableOpacity onPress={()=>Actions.popTo('Test2')}>
                     <Text >HOME1</Text>
                 </TouchableOpacity>
+                <Text>{aa.enname}</Text>
                  <TouchableOpacity onPress={()=>Actions.drawerOpen()}>
                    <Text style={{marginTop:30}}>Open Drawer</Text>
                  </TouchableOpacity>

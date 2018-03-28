@@ -8,8 +8,6 @@ import HttpUtils from './HttpUtils'
 
 /**
  * GET \ POST
- * 从缓存中读取数据
- * @param isCache 是否缓存
  * @param requestType 网络请求类型
  * @param url 请求url
  * @param params 请求参数
@@ -25,7 +23,7 @@ const fetchData = ( requestType) => (url, params, callback) => {
         return callback(response)
       })
     }
-    return promise
+     return promise
 }
 
 /**
