@@ -8,6 +8,9 @@ import Action from '../actions'
 import Test1 from './pages/test/Test1'
 import Test2 from './pages/test/Test2'
 import Test3 from './pages/test/Test3'
+import Test4 from './pages/test/Test4'
+import Test5 from './pages/test/Test5'
+import Test6 from './pages/test/Test6'
 import launch from './pages/launch'
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 import loadingScene from './common/loadingScene'
@@ -19,6 +22,7 @@ import MenuIcon from '../image/menu_burger.png'
 import DrawerContent from './pages/drawer/DrawerContent'
 import TabIcon from './common/TabIcon'
 import  login from './pages/login'
+import  WebView from './common/WebView'
 
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
@@ -38,7 +42,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     tabBarStyle: {
-        backgroundColor: '#eee',
+        backgroundColor: 'transparent',
+        borderTopColor:'transparent'
     },
     tabBarSelectedItemStyle: {
         backgroundColor: '#ddd',
@@ -63,12 +68,16 @@ class App extends Component {
                                     <Scene  key='launch'  component={launch}  />
                                     <Scene key='Test'    component={connect((state) => state.test, Action.dispatch('test'))(Test1)}  />
                                     <Scene key='Test2'   component={connect((state) => state.test, Action.dispatch('test'))(Test2)}  />
-                                    <Scene key='Test3'   component={Test3}  />
                                     <Scene key='login'   component={connect((state) => state.homeTab.login, Action.dispatch('login'))(login)}  />
                                 </Stack>
-                                <Scene key="loadingScene" component={loadingScene}/>
 
+                                <Scene key="loadingScene" component={loadingScene}/>
                             </Lightbox>
+                            <Scene key='Test3'   component={Test3}  />
+                            <Scene key='Test4'   component={Test4}  />
+                            <Scene key='Test5'   component={Test5}  />
+                            <Scene key='Test6'   component={Test6}  />
+                            <Scene key='WebView'  hideNavBar={false}  component={WebView}  title={'aaaaa'} />
                             <Drawer
                                 hideNavBar
                                 key="drawer"
@@ -86,7 +95,7 @@ class App extends Component {
                                         // activeBackgroundColor="#06c1ae"
                                         // inactiveBackgroundColor="#979797"
                                     >
-                                        <Scene key="tab_1_1" initial={true}   component={connect((state) => state.homeTab, Action.dispatch('login'))(TabView)}   hideNavBar title="首页"   icon={TabIcon}   select={require('../image/tab_1_1.png')}normal={require('../image/tab_1_2.png')} />
+                                        <Scene key="tab_1_1" initial={true}   component={connect((state) => state.news, Action.dispatch('news'))(TabView)}   hideNavBar title="首页"   icon={TabIcon}   select={require('../image/tab_1_1.png')}normal={require('../image/tab_1_2.png')} />
                                         <Scene key="tab_2_1" component={TabView2}  title="新闻"     hideNavBar icon={TabIcon}   select={require('../image/tab_2_1.png')}normal={require('../image/tab_2_2.png')} />
                                         <Scene key="tab_3_1" component={TabView3}  title="视频"     hideNavBar  icon={TabIcon}    select={require('../image/tab_3_1.png')}normal={require('../image/tab_3_2.png')} />
                                         <Scene key="tab_4_1" component={TabView4}  title="我的"     hideNavBar icon={TabIcon}    select={require('../image/tab_4_1.png')}normal={require('../image/tab_4_2.png')} />

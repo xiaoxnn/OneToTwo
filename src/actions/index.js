@@ -4,10 +4,11 @@
 import {bindActionCreators}  from 'redux'
 import test from './test/index'
 import  login from './login/index'
-
+import  news from './news'
 const action = {
     test,
-    login
+    login,
+    news
 }
 
 const dispatch = name => dispatch => {

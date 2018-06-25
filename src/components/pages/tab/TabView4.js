@@ -11,20 +11,28 @@ import {
     Alert
 } from 'react-native';
 import   {Actions} from 'react-native-router-flux'
+import  {deviceInfo}  from '../../../utils'
+export default class TabView4 extends Component<{}> {
 
-export default class TabView3 extends Component<{}> {
+    constructor(props){
+        super(props)
+    }
 
     componentDidMount() {
 
     }
 
     render() {
-        let num=this.props.testSum;
         return (
             <View style={styles.contain}>
-
-                <TouchableOpacity onPress={()=>Actions.Test2()}>
-                    <Text >我的</Text>
+                <View style={styles.item}>
+                    <Text style={styles.text}>Demo集合</Text>
+                </View>
+                <View style={styles.line}/>
+                <TouchableOpacity onPress={()=>Actions.Test3() }>
+                <View style={styles.item}>
+                    <Text style={styles.text}>动画</Text>
+                </View>
                 </TouchableOpacity>
             </View>
         )
@@ -36,7 +44,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f4f4f4',
         alignItems: 'center',
-        justifyContent:'center'
+
     },
+    item:{
+        width:deviceInfo.deviceWidth,
+        height:deviceInfo.deviceWidth*0.1,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    text:{
+        color:'#666666',
+         fontSize:14
+    },
+    line:{
+        backgroundColor:'#999',
+        width:deviceInfo.deviceWidth,
+        height:0.5,
+    }
+
+
 
 });

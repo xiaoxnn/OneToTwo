@@ -13,7 +13,7 @@ export default class test1 extends Component<{}> {
 
     componentDidMount() {
         this.fristTime= setTimeout(() => {
-            Actions.Test();
+            Actions.drawer();
         }, 2000)
     }
     componentWillUnmount() {
