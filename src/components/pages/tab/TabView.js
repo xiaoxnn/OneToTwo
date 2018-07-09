@@ -30,8 +30,7 @@ export default class TabView extends Component<{}> {
             <NewsItem  data={item}/>
         )
     }
-
-
+    
     render() {
         let data=this.props.data;
         return (
