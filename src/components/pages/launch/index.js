@@ -4,7 +4,8 @@ import {
    Image,
     View,
     StyleSheet,
-    Dimensions
+    Dimensions,
+
 } from 'react-native';
 import   {Actions} from 'react-native-router-flux'
 var deviceHeight = Dimensions.get('window').height;//640

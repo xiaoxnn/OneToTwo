@@ -60,7 +60,7 @@ class App extends Component {
                     tintColor='white'
                     getSceneStyle={getSceneStyle}
                 >
-                    <Scene key='root'>
+                    <Scene key='root'  >
                         <Modal key='Modal' hideNavBar
                                transitionConfig={() => ({screenInterpolator: CardStackStyleInterpolator.forHorizontal})}  >
 
