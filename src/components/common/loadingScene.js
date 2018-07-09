@@ -27,6 +27,7 @@ export default class loadingScene extends Component<{}> {
         )
     }
 }
+
 const styles = StyleSheet.create({
     contain: {
         width: deviceInfo.deviceWidth,
