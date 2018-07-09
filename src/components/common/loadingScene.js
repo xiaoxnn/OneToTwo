@@ -13,7 +13,6 @@ export default class loadingScene extends Component<{}> {
     componentDidMount() {
 
     }
-
     render() {
         return (
             <View style={styles.contain}>
