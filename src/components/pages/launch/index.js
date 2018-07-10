@@ -14,7 +14,7 @@ export default class test1 extends Component<{}> {
 
     componentDidMount() {
         this.fristTime= setTimeout(() => {
-            Actions.drawer();
+            Actions.tab_4_1();
         }, 2000)
     }
     componentWillUnmount() {

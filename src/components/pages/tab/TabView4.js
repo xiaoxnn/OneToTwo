@@ -30,9 +30,14 @@ export default class TabView4 extends Component<{}> {
                 </View>
                 <View style={styles.line}/>
                 <TouchableOpacity onPress={()=>Actions.Test3() }>
-                <View style={styles.item}>
-                    <Text style={styles.text}>动画</Text>
-                </View>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>动画</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>Actions.SelectAddressAndTime() }>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>选择地址与时间</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         )

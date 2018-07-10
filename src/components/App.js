@@ -23,6 +23,7 @@ import DrawerContent from './pages/drawer/DrawerContent'
 import TabIcon from './common/TabIcon'
 import  login from './pages/login'
 import  WebView from './common/WebView'
+import SelectAddressAndTime from './pages/demo/SelectAddressAndTime'
 
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
@@ -77,7 +78,8 @@ class App extends Component {
                             <Scene key='Test3'   component={Test3}  />
                             <Scene key='Test4'   component={Test4}  />
                             <Scene key='Test5'   component={Test5}  />
-                            <Scene key='Test6'   component={Test6}  />
+                            <Scene key='SelectAddressAndTime'   component={SelectAddressAndTime}  />
+                            <Scene key='tab_4_1'   component={TabView4}  />
                             <Scene key='WebView'  hideNavBar={false}  component={WebView}  title={'aaaaa'} />
                             <Drawer
                                 hideNavBar
