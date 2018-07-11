@@ -123,7 +123,7 @@ export default class SelectAddressOrDate extends Component<{}> {
 
     /**
      * 时间确认值
-     * @param pickedValue  ['河北', '唐山', '古冶区']
+     * @param pickedValue  ['2018年', '1月', '1日']
      */
     confirmDateValue(pickedValue){
         this.props.callBackDateValue&&this.props.callBackDateValue(pickedValue)

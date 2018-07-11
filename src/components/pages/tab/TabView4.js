@@ -39,6 +39,11 @@ export default class TabView4 extends Component<{}> {
                         <Text style={styles.text}>选择地址与时间</Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={()=>Actions.PlayVideo() }>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>播放视频</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }

@@ -3,9 +3,10 @@ package com.onetotwo;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
+import com.github.yamill.orientation.OrientationPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,9 +36,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
+            new OrientationPackage(),
             new PickerViewPackage(),
-            new ReactMaterialKitPackage(),
-            new PickerPackage()
+            new ReactMaterialKitPackage()
       );
     }
 

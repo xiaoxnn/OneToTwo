@@ -24,6 +24,7 @@ import TabIcon from './common/TabIcon'
 import  login from './pages/login'
 import  WebView from './common/WebView'
 import SelectAddressAndTime from './pages/demo/SelectAddressAndTime'
+import PlayVideo from './pages/demo/PlayVideo'
 
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
@@ -79,7 +80,8 @@ class App extends Component {
                             <Scene key='Test4'   component={Test4}  />
                             <Scene key='Test5'   component={Test5}  />
                             <Scene key='SelectAddressAndTime'   component={SelectAddressAndTime}  />
-                            <Scene key='tab_4_1'   component={TabView4}  />
+                            <Scene key='tab_4_1'   component={TabView4}    />
+                            <Scene key='PlayVideo'   component={PlayVideo} />
                             <Scene key='WebView'  hideNavBar={false}  component={WebView}  title={'aaaaa'} />
                             <Drawer
                                 hideNavBar

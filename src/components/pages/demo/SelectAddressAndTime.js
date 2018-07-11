@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import  SelectAddressOrDate  from '../../common/SelectAddressOrDate'
 import  {deviceInfo} from '../../../utils'
-import  PropTypes from 'prop-types'
+
 export default class TabView4 extends Component<{}> {
 
     constructor(props){

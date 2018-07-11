@@ -6,6 +6,7 @@
 
 import {Dimensions, Platform} from 'react-native'
 // import DeviceInfo from 'react-native-device-info'
+
 export default deviceInfo = {
   // 设备宽度
   deviceWidth: Dimensions.get('window').width,
