@@ -1,397 +1,337 @@
-/**
- * Created by guangqiang on 2017/9/7.
- */
-import React, {Component} from 'react'
-import {View, Text,Image, TouchableOpacity, Slider, ActivityIndicator, Modal, Platform,Dimensions,StyleSheet,StatusBar,BackHandler,ToastAndroid} from 'react-native'
+import React, {Component} from 'react';
+import {
+    ActivityIndicator,
+    Text,
+    Image,
+    StyleSheet,
+    Slider,
+    View,
+    TouchableOpacity,
+    Platform,
+    BackHandler
+} from 'react-native';
+
+import  {deviceInfo,Orientation,TimeUtil} from '../../utils'
 import Video from 'react-native-video'
-import Orientation from 'react-native-orientation'
-import {formatMediaTime} from '../../../util/CommonUtils'
-var deviceHeight = Dimensions.get('window').height;//640
-var deviceWidth = Dimensions.get('window').width;//360
-const playerHeight = deviceWidth*0.6
-export default class MoviePlayer extends Component {
+import   {Actions} from 'react-native-router-flux'
+let  url_="http://bd.abiechina.com/intrduceapp/vedio/play?filename=upload/videos/c5e7c87d787a4c0eac27b85fe74bb4a5.mp4"
+export default class MoviePlayer extends Component<{}> {
 
-  constructor(props) {
-    super(props)
-    this.player = null
-    this.state = {
-      rate: 1,
-      slideValue: 0.00,
-      currentTime: 0.00,
-      duration: 0.00,
-      paused: false,
-      isTouchedScreen: true,
-      modalVisible: true,
-      isLock: false,
-      orientation: '',
-      specificOrientation: '',
-      closeTouched:false,
+    constructor(props){
+        super(props)
+        this.state={
+            slideValue: 0.00,
+            currentTime: 0.00,
+            duration: 0.00,
+            orientation:'',                 //PORTRAIT  垂直
+            isLock:false,                  //是否锁屏
+            isTouchedScreen:false,         //是否触摸
+            closeTouched:false,            //触摸后关掉进度
+            paused: false,                 //暂停播放
+            loading:true,                  //正在加载中
+            playError:false,               //播放错误
+        }
     }
-  }
 
-  componentWillMount() {
-    const init = Orientation.getInitialOrientation()
-    console.log("test  "+init);
- /*   if(init=='PORTRAIT'){
-       this.state.orientation='LANDSCAPE'
-        this.state.specificOrientation='LANDSCAPE'
-        Orientation.lockToLandscape();
-    }*/
-     this.setState({
-      init,
-       orientation: init,
-      specificOrientation: init,
-    })
-  }
+    componentWillMount() {
+        const init = Orientation.getInitialOrientation()
+        this.state.orientation=init
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+        }
+    }
 
-  componentDidMount() {
-    Orientation.addOrientationListener(this._updateOrientation)
-    Orientation.addSpecificOrientationListener(this._updateSpecificOrientation)
-      if (Platform.OS === 'android') {
-          BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
-      }
-  }
-
-  componentWillUnmount() {
-      Orientation.lockToPortrait()
-    Orientation.removeOrientationListener(this._updateOrientation)
-    Orientation.removeSpecificOrientationListener(this._updateSpecificOrientation)
-      if (Platform.OS === 'android') {
-          BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-      }
-      this.timer && clearTimeout(this.timer)
-  }
-
+    componentWillUnmount() {
+        if (Platform.OS === 'android') {
+            BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+        }
+        this.player.dismissFullscreenPlayer()
+        this.timer && clearTimeout(this.timer)
+    }
     onBackAndroid = () => {
-         if(this.state.orientation !== 'PORTRAIT'){
-             Orientation.lockToPortrait()
-             this.setState({
-                 isLock:false,
-                 orientation: this.state.orientation === 'PORTRAIT'?'LANDSCAPE':'PORTRAIT'
-             })
-             return true
-         }
+        if(this.state.orientation !== 'PORTRAIT'){
+            Orientation.lockToPortrait()
+            this.setState({
+                isLock:false,
+                orientation: this.state.orientation === 'PORTRAIT'?'LANDSCAPE':'PORTRAIT'
+            })
+            return true
+        }
         return false
     };
 
-  _updateOrientation(orientation){
-
-      this.setState({ orientation:orientation })
-  }
-  _updateSpecificOrientation(specificOrientation){
-
-      this.setState({ specificOrientation:specificOrientation })
-  }
-
-  loadStart(data) {
-    console.log('loadStart', data)
-  }
-
-  setDuration(duration) {
-    this.setState({duration: duration.duration})
-  }
-
-  setTime(data) {
-    let sliderValue = parseInt(this.state.currentTime)
-    this.setState({
-      slideValue: sliderValue,
-      currentTime: data.currentTime,
-      modalVisible: false
-    })
-
-    if(this.state.isTouchedScreen&&!this.state.closeTouched){
-        this.state.closeTouched=true
-        this.timer = setTimeout(()=> {
-            this.state.isTouchedScreen=false
-            this.state.closeTouched=false
-        }, 6000);
+    fullScreenPlayerWillPresent(){
 
     }
-  }
 
-  onEnd(data) {
-    this.player.seek(0)
-  }
+    fullScreenPlayerDidPresent(){
 
-  videoError(error) {
-    this.showMessageBar('播放器报错啦！')(error.error.domain)('error')
-    this.setState({
-      modalVisible: false
-    })
-  }
+    }
+    fullScreenPlayerWillDismiss(){
 
-  onBuffer(data) {
-    console.log('onBuffer', data)
-  }
+    }
+    fullScreenPlayerDidDismiss(){
 
-  onTimedMetadata(data) {
-    console.log('onTimedMetadata', data)
-  }
+    }
+    onBuffer(){
 
-  showMessageBar = title => msg => type => {
-      ToastAndroid.showWithGravity(msg,ToastAndroid.SHORT,ToastAndroid.CENTER);
-  }
+    }
 
-  play() {
-    this.setState({
-      paused: !this.state.paused,
-    })
-  }
+    onEnd(){
+        this.setState({
+            paused:true
+        })
+    }
+
+    videoError(){
+        this.setState({
+            playError:true
+        })
+    }
 
 
-  goback(){
-     //  Orientation.lockToPortrait();
-     // this.props.navigation.pop();
-    //  this.props.navigator.pop()
+    loadStart(e){
 
+    }
 
-     if(this.state.orientation === 'PORTRAIT'){
-         this.props.navigation.goBack()
-     }else{
-         Orientation.lockToPortrait()
-         this.setState({
-             orientation: this.state.orientation === 'PORTRAIT'?'LANDSCAPE':'PORTRAIT'
-         })
-     }
-  }
+    onLoad(e){
+        this.player.presentFullscreenPlayer()
+        this.setState({duration: e.duration})
+    }
 
-  changeOrientation(){
-      this.state.orientation === 'PORTRAIT'?Orientation.lockToLandscape():Orientation.lockToPortrait()
+    back(){
+        if(this.state.orientation !== 'PORTRAIT'){
+            Orientation.lockToPortrait()
+            this.setState({
+                isLock:false,
+                orientation: this.state.orientation === 'PORTRAIT'?'LANDSCAPE':'PORTRAIT'
+            })
+        }else{
+            Actions.pop()
+        }
+    }
 
-      this.setState({
+    progress(e){
+        let sliderValue = parseInt(this.state.currentTime)
+        this.setState({
+            slideValue: sliderValue,
+            currentTime: e.currentTime,
+            loading: false,
+            playError:false,
+        })
+        if(this.state.isTouchedScreen&&!this.state.closeTouched){
+            this.state.closeTouched=true
+            this.timer = setTimeout(()=> {
+                this.state.isTouchedScreen=false
+                this.state.closeTouched=false
+            }, 6000);
+        }
+    }
+
+    changeOrientation(){
+        this.state.orientation === 'PORTRAIT'?Orientation.lockToLandscape():Orientation.lockToPortrait()
+        this.setState({
             orientation: this.state.orientation === 'PORTRAIT'?'LANDSCAPE':'PORTRAIT'
-      })
-  }
-
-    renderModal2(){
-
-       if(this.state.modalVisible){
-           return (
-               <View style={[styles.indicator,{position:'absolute'}]}>
-                 <ActivityIndicator
-                     animating={true}
-                     style={[{height: 80}]}
-                     color={'#06c1ae'}
-                     size="large"
-                 />
-               </View>
-           )
-       }
+        })
+    }
+    render() {
+        const {orientation,isTouchedScreen,isLock,paused,loading,playError}=this.state
+        const {url,title}=this.props
         return (
-          null
+            <TouchableOpacity style={styles.contain}
+                              disabled={isLock}
+                              activeOpacity={1}
+                              onPress={()=>this.setState({isTouchedScreen:!isTouchedScreen})}>
+                <Video source={{uri: url}}   // Can be a URL or a local file.
+                       ref={(ref) => {
+                           this.player = ref
+                       }}                                      // Store reference
+                       onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                       onEnd={this.onEnd.bind(this)}                      // Callback when playback finishes
+                       onError={this.videoError.bind(this)}               // Callback when video cannot be loaded
+                       onLoadStart={this.loadStart.bind(this)}
+                       onLoad={this.onLoad.bind(this)}
+                       onProgress={this.progress.bind(this)}
+                       paused={paused}
+                       onFullscreenPlayerWillPresent={this.fullScreenPlayerWillPresent} // Callback before fullscreen starts
+                       onFullscreenPlayerDidPresent={this.fullScreenPlayerDidPresent}   // Callback after fullscreen started
+                       onFullscreenPlayerWillDismiss={this.fullScreenPlayerWillDismiss} // Callback before fullscreen stops
+                       onFullscreenPlayerDidDismiss={this.fullScreenPlayerDidDismiss}  // Callback after fullscreen stopped
+                       fullscreen={true}
+                       style={this.state.orientation==='PORTRAIT'?styles.hbackgroundVideo:styles.backgroundVideo} />
+
+                {
+                    isTouchedScreen && !isLock && !playError && !loading ?
+                        <View style={orientation==='PORTRAIT'?styles.hprogress:styles.progress }>
+                            <TouchableOpacity onPress={()=>this.setState({paused:!paused})}>
+                                <Image source={ paused?require('../../image/play.png'):require('../../image/pase.png')} style={styles.playImage}/>
+                            </TouchableOpacity>
+                            <Text style={styles.timeStyle}>{TimeUtil.formatMediaTime(Math.floor(this.state.currentTime))}</Text>
+                            <Slider
+                                style={styles.slider}
+                                value={this.state.slideValue}
+                                maximumValue={this.state.duration}
+                                minimumTrackTintColor={'#fff'}
+                                maximumTrackTintColor={'#666'}
+                                thumbTintColor={'#fff'}
+                                step={1}
+                                onValueChange={value => this.setState({currentTime: value})}
+                                onSlidingComplete={value => this.player.seek(value)}
+                            />
+                            <Text style={[styles.timeStyle,{marginLeft:0}]}>{TimeUtil.formatMediaTime(Math.floor(this.state.duration))}</Text>
+                            <TouchableOpacity onPress={()=>this.changeOrientation()}>
+                                <Image source={require('../../image/fullscreen.png')} style={[styles.image,{marginRight:10,marginLeft:10}]}/>
+                            </TouchableOpacity>
+                        </View>:<View style={orientation==='PORTRAIT'?{height:40}:{height:0}}/>
+                }
+                {
+                    orientation!== 'PORTRAIT' ?
+                        <TouchableOpacity
+                            style={styles.lock}
+                            onPress={() => this.setState({isLock: !isLock})}
+                        >
+                            <Image source={isLock ?require('../../image/lock.png'):require('../../image/unclok.png')} style={styles.image}/>
+                        </TouchableOpacity> : null
+                }
+                {
+                    isTouchedScreen && !isLock ?
+                        <View style={orientation === 'PORTRAIT' ? styles.htopBar : styles.topBar}>
+                            <TouchableOpacity onPress={() => this.back()}>
+                                <Image
+                                    source={isLock ? require('../../image/lock.png') : require('../../image/back.png')}
+                                    style={styles.imageBack}/>
+                            </TouchableOpacity>
+                            <Text style={styles.title} numberOfLines={1}>{title}</Text>
+                        </View>:null
+
+                }
+                {loading?
+                    <View style={styles.loading}>
+                        <ActivityIndicator
+                            animating={true}
+                            style={[{height: 80}]}
+                            color={'#06c1ae'}
+                            size="large"
+                        />
+                    </View>:null
+                }
+                {playError?
+                    <View  style={orientation === 'PORTRAIT' ?styles.hplayError:styles.playError}>
+                        <View  style={styles.errorBg}>
+                            <Text style={styles.title}>视频播放错误 !!!</Text>
+                        </View>
+                    </View>:null
+                }
+            </TouchableOpacity>
+
         )
     }
-
-  renderModal() {
-    return (
-      <Modal
-        animationType={"none"}
-        transparent={true}
-        visible={this.state.modalVisible}
-        onRequestClose={() =>
-            this.setState({
-            modalVisible: false
-        })}
-      >
-        <View style={styles.indicator}>
-          <ActivityIndicator
-            animating={true}
-            style={[{height: 80}]}
-            color={'#06c1ae'}
-            size="large"
-          />
-        </View>
-      </Modal>
-    )
-  }
-
-  render() {
-    const {orientation, isLock} = this.state
-    const url  =  this.props.url
-    const title=this.props.title==undefined?"":this.props.title
-    return (
-      <TouchableOpacity
-          disabled={this.state.isLock}
-          activeOpacity={0.7}
-          style={[styles.movieContainer, {height: orientation === 'PORTRAIT' ? deviceHeight :deviceWidth,
-          marginTop: orientation === 'PORTRAIT' ? Platform.OS === 'ios' ? 20 : 0 : 0}]}
-        onPress={() => this.setState({isTouchedScreen: !this.state.isTouchedScreen})}>
-        <Video source={{uri: url}}
-               ref={ref => this.player = ref}
-               rate={this.state.rate}
-               volume={1.0}
-               muted={false}
-               paused={this.state.paused}
-               resizeMode="cover"
-               repeat={true}
-               playInBackground={false}
-               playWhenInactive={false}
-               ignoreSilentSwitch={"ignore"}
-               progressUpdateInterval={250.0}
-               onLoadStart={(data) => this.loadStart(data)}
-               onLoad={data => this.setDuration(data)}
-               onProgress={(data) => this.setTime(data)}
-               onEnd={(data) => this.onEnd(data)}
-               onError={(data) => this.videoError(data)}
-               onBuffer={(data) => this.onBuffer(data)}
-               onTimedMetadata={(data) => this.onTimedMetadata(data)}
-               style={this.state.orientation === 'PORTRAIT'?styles.verticalVideoPlayer:styles.videoPlayer}
-        />
-          {  this.state.isTouchedScreen && !isLock ?
-            <View style={ this.state.orientation === 'PORTRAIT'?styles.verticalNavContentStyle:styles.navContentStyle}>
-              <View style={{flexDirection: 'row', alignItems:'center', flex: 1}}>
-                <TouchableOpacity
-                    disabled={this.state.isLock}
-                  style={{backgroundColor:  'transparent'}}
-                     onPress={()=>this.goback()}>
-                  <Image source={require('./../../../img/back.png')}
-                         style={styles.backiamge}/>
-                </TouchableOpacity>
-                <Text style={{color:'#fff', marginLeft: 10}}>{title}</Text>
-              </View>
-            </View>:
-              <View style={{height:44,position:"absolute"}}/>
-          }
-        {
-         orientation!== 'PORTRAIT' ?
-            <TouchableOpacity
-              style={{marginHorizontal: 10, backgroundColor:'transparent', width: 30, height: 30, position:'absolute',left:0}}
-              onPress={() => this.setState({isLock: !this.state.isLock})}
-            >
-              <Image source={ this.state.isLock ?require('./../../../img/lock.png'):require('./../../../img/unclok.png')}
-                     style={styles.lockimag}/>
-             </TouchableOpacity> : null
-        }
-        {
-          this.state.isTouchedScreen && !isLock ?
-            <View style={ this.state.orientation === 'PORTRAIT'?styles.toolBarStyle:styles.verticalToolBarStyle}>
-              <TouchableOpacity onPress={() => this.play()}>
-                <Image source={this.state.paused?require('./../../../img/start_play.png'):require('./../../../img/stop_play.png')}
-                       style={styles.image} />
-              </TouchableOpacity>
-              <View style={styles.progressStyle}>
-                <Text style={styles.timeStyle}>{formatMediaTime(Math.floor(this.state.currentTime))}</Text>
-                <Slider
-                  style={styles.slider}
-                  value={this.state.slideValue}
-                  maximumValue={this.state.duration}
-                  minimumTrackTintColor={'#666'}
-                  maximumTrackTintColor={'#FFF'}
-                  thumbTintColor={'#fff'}
-                  thumbImage={require('../../image/play_pause.png')}
-                  step={1}
-                  onValueChange={value => this.setState({currentTime: value})}
-                  onSlidingComplete={value => this.player.seek(value)}
-                />
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{color: '#fff', fontSize: 12}}>{formatMediaTime(Math.floor(this.state.duration))}</Text>
-                </View>
-              </View>
-              {
-                orientation === 'PORTRAIT' ?
-                  <TouchableOpacity onPress={()=>this.changeOrientation()}>
-                    <Image source={require('./../../../img/pull_big.png')}
-                           style={styles.image}/>
-                  </TouchableOpacity> :
-                  <TouchableOpacity onPress={()=>this.changeOrientation()}>
-                    <Image source={require('./../../../img/pull_small.png')}
-                           style={styles.image}/>
-                  </TouchableOpacity>
-              }
-            </View> :null
-        }
-         {this.renderModal2()}
-          {<StatusBar  hidden={ this.state.orientation === 'PORTRAIT'?true:true} />
-          }
-      </TouchableOpacity>
-    )
-  }
 }
 
 const styles = StyleSheet.create({
-  movieContainer: {
-      justifyContent:'center',
-      backgroundColor:'#000'
-  },
-  videoPlayer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-    verticalVideoPlayer:{
-       width:deviceWidth,
-       height:deviceWidth*0.6
+    contain: {
+        flex:1,
+        backgroundColor: '#000',
+        justifyContent: 'center',
     },
-  navContentStyle: {
-    height: 44,
-    paddingHorizontal: 10,
-    position:'absolute',
-    top:0
-  },
-    verticalNavContentStyle: {
-        height: 44,
-        paddingHorizontal: 10,
-        position:'absolute',
-        top:0
+    backgroundVideo: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
     },
-  toolBarStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    justifyContent: 'space-around',
-    marginTop: -30,
-    height: 30,
-  },
-  verticalToolBarStyle:{
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 10,
-      justifyContent: 'space-around',
-      alignItems:'flex-end',
-      height:deviceWidth,
-      paddingBottom:10
-  },
-  timeStyle: {
-    color: '#fff',
-    fontSize: 12
-  },
-  slider: {
-    flex: 1,
-
-  },
-  progressStyle: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginHorizontal: 10
-  },
-  indicator: {
-    height: deviceWidth,
-    width: deviceHeight,
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navToolBar: {
-    backgroundColor: 'transparent',
-    marginHorizontal: 5
-  },
-    lockimag:{
-        width:26,
-        height:26,
+    hbackgroundVideo:{
+        width:deviceInfo.deviceWidth,
+        height:deviceInfo.deviceWidth*0.5,
+        backgroundColor:'#000'
+    },
+    progress:{
+        flexDirection:'row',
+        height:40,
+        marginTop:deviceInfo.deviceWidth-40,
+        alignItems:'center',
+        backgroundColor:'rgba(0,0,0,0.2)'
+    },
+    hprogress:{
+        flexDirection:'row',
+        bottom:40,
+        height:40,
+        alignItems:'center',
+        backgroundColor:'rgba(0,0,0,0.2)'
+    },
+    timeStyle: {
+        color: '#fff',
+        fontSize: 14,
+        marginLeft:10
+    },
+    slider: {
+        flex:1,
+    },
+    playImage:{
+        width:24,
+        height:24,
+        marginLeft:10
     },
     image:{
-       width:15,
-        height:15,
+        width:24,
+        height:24
     },
-    backiamge:{
-        width:7,
-        height:15,
-    }
-    ,clear:{
-        backgroundColor:'transparent'
-    }
-})
+    lock:{
+        backgroundColor:'transparent',
+        position:'absolute',
+        left:0
+    },
+    topBar:{
+        width:deviceInfo.deviceWidth,
+        height:40,
+        flexDirection:'row',
+        alignItems:'center',
+        position:'absolute',
+        top:0,
+        paddingLeft:10,
+    },
+    htopBar:{
+        width:deviceInfo.deviceWidth-20,
+        height:40,
+        flexDirection:'row',
+        alignItems:'center',
+        position:'absolute',
+        top:0,
+        paddingLeft:10,
+    },
+    title:{
+        fontSize:12,
+        color:'#fff',
+        marginLeft:10,
+        marginRight:10,
+    },
+    imageBack:{
+        width:20,
+        height:20
+    },
+    loading:{
+        position:'absolute',
+        width:deviceInfo.deviceWidth,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    playError:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+
+    },
+    hplayError:{
+        width:deviceInfo.deviceWidth,
+        justifyContent:'center',
+        alignItems:'center',
+        position:'absolute'
+    },
+    errorBg:{
+        height:40,
+        padding:10,
+        borderRadius:20,
+        backgroundColor:'#000',
+    },
+});
