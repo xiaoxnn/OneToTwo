@@ -1,5 +1,5 @@
 /**
- * Created by nigo on 2018/3/19.
+ * Created by justin on 2018/3/19.
  */
 import React, { Component } from 'react';
 
@@ -86,7 +86,7 @@ export default class SelectAddressOrDate extends Component<{}> {
 
 
     /**
-     *  在外部调用 显示地址
+     *  在外部调用 显示时间
      * @param pickedValue ['2018年', '1月', '1日']
      */
     showDate(pickedValue){

@@ -44,6 +44,12 @@ export default class TabView4 extends Component<{}> {
                         <Text style={styles.text}>播放视频</Text>
                     </View>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>Actions.LookImageZoom() }>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>图片放大显示</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }
