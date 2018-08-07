@@ -27,7 +27,8 @@ import SelectAddressAndTime from './pages/demo/SelectAddressAndTime'
 import PlayVideo from './pages/demo/PlayVideo'
 import MoviePlayer from './common/MoviePlayer'
 import LookImageZoom from './pages/demo/LookImageZoom'
-
+import OpenCamera from './pages/demo/OpenCamera'
+import ZhiHuBao from './pages/demo/ZhiHuBao'
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
     return (state, action) => {
@@ -86,6 +87,8 @@ class App extends Component {
                             <Scene key='PlayVideo'   component={PlayVideo} />
                             <Scene key='MoviePlayer'   component={MoviePlayer} />
                             <Scene key='LookImageZoom'   component={LookImageZoom} />
+                            <Scene key='OpenCamera'   component={OpenCamera} />
+                            <Scene key='ZhiHuBao'   component={ZhiHuBao} />
                             <Scene key='WebView'  hideNavBar={false}  component={WebView}  title={'aaaaa'} />
                             <Drawer
                                 hideNavBar

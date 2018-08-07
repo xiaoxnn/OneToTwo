@@ -50,6 +50,17 @@ export default class TabView4 extends Component<{}> {
                         <Text style={styles.text}>图片放大显示</Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={()=>Actions.OpenCamera() }>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>打开本地图库</Text>
+                    </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>Actions.ZhiHuBao() }>
+                    <View style={styles.item}>
+                        <Text style={styles.text}>仿支付宝更多</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         )
     }

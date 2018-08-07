@@ -66,6 +66,8 @@ export default class LookImageZoom extends Component<{}> {
                 </View>
                 <ImageZoom  ref={'ImageZoom'} imageUrls={this.state.image} isShowRight={true} topBarRightCallBack={this.deleteImage.bind(this)} zoomImageIndex={this.state.zoomImageIndex} />
             </View>
+
+
         )
     }
 }
